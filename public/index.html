@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myTask</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="wrapper">
+            <div class="date">
+                <div class="date__day"></div>
+                <div class="date__month-and-year">
+                    <div class="date__month"></div>
+                    <div class="date__year"></div>
+                </div>
+            </div>
+            <div class="week-day"></div>
+        </div>
+    </header> 
+        
+    <main>
+        <div class="wrapper">
+            <div class="task-list">
+            </div>
+        </div>
+    </main>
+
+    <div class="main-panel" id="myForm" class="form" style="display: none">
+        <input type="text" name="myForm__input" id="myForm__input" class="form__input" placeholder="Dodaj zadanie">
+    </div>
+
+    <div class="edit-panel" id="edit_panel">
+        <!-- <input type="text" name="myForm__input" id="myForm__input" class="form__input" placeholder="Dodaj zadanie"> -->
+    </div>
+
+
+    <button type="submit" id="myForm__submit" class="button"><img src="img/plus.svg" alt=""></button>
+
+    <script src="js/index.js"></script>
+</body>
+</html>

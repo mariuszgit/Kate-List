@@ -27,28 +27,16 @@ submit.addEventListener('click', (ev) => {
     } else {
         let input_val = input.value;
         let action = 'add';
-        console.log('a');
         let data = {input_val, action}
-        console.log('b');
         if (input.value!='') {
-            console.log('c');
             task_list.innerHTML = '';
-            console.log('d');
             sendData(data);
-            console.log('e');
             input.value = '';
-            console.log('f');
             clicks = 0;
-            console.log('g');
             panel.style.display = 'none';
-            console.log('h');
         }
-        console.log('i');
-        printTasks();
-        console.log('j');
-        
+        printTasks();  
     }
-    
 });
 
 async function sendData(data) {
@@ -61,17 +49,17 @@ async function sendData(data) {
     }
     await fetch('/api', options)
     .then(response => {return response.json()})
-    .then(res => console.log(res));
+    .then(json => console.log(json));
 }
 
 async function printTasks() {
-    let resp = await fetch('/api').catch(error => console.log(error+'yey'));
+    let resp = await fetch('/api').catch(error => console.log(error+'error from printTask'));
     let json = await resp.json();
-    console.log(json);
     
     json.forEach(function(el) {
         const div = document.createElement('div');
         div.classList.add('task-list__item');
+        div.setAttribute('data-id', el.id);
         if (el.status == 'checked') {div.classList.add('checked')};
         div.innerHTML = `
                 <span>${el.input_val}</span>
@@ -81,45 +69,27 @@ async function printTasks() {
                 `;
         task_list.appendChild(div)
     })
-    
-    // for (i=0; i<arr.length-1; i++) {
-    //     let input_val = JSON.parse(arr[i]).input_val;
-    //     let id = JSON.parse(arr[i]).id;
-    //     let status = JSON.parse(arr[i]).status;
 
-    //     //creating element
-    //     let div = document.createElement('div');
-    //     div.classList.add('task-list__item');
-        
-    //     if (status == 'checked') {div.classList.add('checked')};
-    //     div.setAttribute('data-id', id);
-    //     div.innerHTML = `
-    //         <span>${input_val}</span>
-    //         <a href="" class="task-list__link">
-    //         <img src="img/check.svg" class="task-list__icon" />
-    //         </a>
-    //         `;
-    //     task_list.appendChild(div);
-    // }
+    //adding listeners to checj list
 
-    //
-    // check_list = document.querySelectorAll('.task-list__link');
-    // Array.from(check_list).forEach(el => {
-    //     el.addEventListener('click', function(el) {
-    //         el.preventDefault();
-    //         if(el.target.parentElement.classList.contains('checked')) {
-    //             el.target.parentElement.classList.remove('checked');
-    //             const action = 'unchecking';
-    //             const id = el.target.parentElement.dataset.id;
-    //             let data = {action, id};
-    //             sendData(data);
-    //         } else {
-    //             const action = 'checking';
-    //             const id = el.target.parentElement.dataset.id;
-    //             el.target.parentElement.classList.add('checked');
-    //             let data = {action, id}
-    //             sendData(data);
-    //         }
-    //     })
-    // })
+    let check_list  = document.querySelectorAll('.task-list__link');
+    console.log(Array.from(check_list));
+    Array.from(check_list).forEach(el => {
+        el.addEventListener('click', function(el) {
+            el.preventDefault();
+            if(el.target.parentElement.classList.contains('checked')) {
+                el.target.parentElement.classList.remove('checked');
+                const action = 'unchecking';
+                const id = el.target.parentElement.dataset.id;
+                let data = {action, id};
+                sendData(data);
+            } else {
+                const action = 'checking';
+                const id = el.target.parentElement.dataset.id;
+                el.target.parentElement.classList.add('checked');
+                let data = {action, id}
+                sendData(data);
+            }
+        })
+    })
 }

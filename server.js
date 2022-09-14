@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
 var fs = require('fs');
-app.listen(3000, () => {console.log('Listening to port 3000');});
+const port = process.env.PORT || 3000;
+app.listen(port, () => {console.log(`Listening to port ${port}`)});
 app.use(express.static('public'));
 app.use(express.json({limit: '1mb'}));
 
@@ -40,38 +41,25 @@ app.post('/api', (request, response) => {
         });
     }
 
-    // if (request.body.action == 'checking') {
-    //     const opened = fs.readFileSync('base.txt', 'utf-8');
-    //     let tab = opened.split('\n');
-    //     console.log(tab);
-    //     const index = Array.from(opened.split('\n')).findIndex(el => JSON.parse(el).id == request.body.id);
+    if (request.body.action == 'checking') {
+        const opened = fs.readFileSync('base.txt', 'utf-8');
+        let opened_tab = JSON.parse(opened);
+        let index = opened_tab.findIndex(el => el.id==request.body.id);
+        opened_tab[index].status = "checked";
+        fs.writeFile('base.txt', JSON.stringify(opened_tab), function (err) {
+            if (err) throw err;
+            console.log('Saved!');
+        });
+    }
 
-    //     let new_tab = JSON.parse(tab[index]);
-    //     new_tab.status ="checked";
-    //     console.log(JSON.stringify(new_tab), tab);
-    //     tab.splice(index,1, JSON.stringify(new_tab))
-    //     console.log(tab);
-    //     fs.writeFile('base.txt', tab.join('\n'), function (err) {
-    //         if (err) throw err;
-    //         console.log('Saved!');
-    //     });
-    // }
-
-    // if (request.body.action == 'unchecking') {
-    //     const opened = fs.readFileSync('base.txt', 'utf-8');
-    //     let tab = opened.split('\n');
-    //     console.log(tab);
-    //     const index = Array.from(opened.split('\n')).findIndex(el => JSON.parse(el).id == request.body.id);
-
-    //     let new_tab = JSON.parse(tab[index]);
-    //     // new_tab.status ="checked";
-    //     delete new_tab.status;
-    //     console.log(JSON.stringify(new_tab), tab);
-    //     tab.splice(index,1, JSON.stringify(new_tab))
-    //     console.log(tab);
-    //     fs.writeFile('base.txt', tab.join('\n'), function (err) {
-    //         if (err) throw err;
-    //         console.log('Saved!');
-    //     });
-    // }
+    if (request.body.action == 'unchecking') {
+        const opened = fs.readFileSync('base.txt', 'utf-8');
+        let opened_tab = JSON.parse(opened);
+        let index = opened_tab.findIndex(el => el.id==request.body.id);
+        delete opened_tab[index].status;
+        fs.writeFile('base.txt', JSON.stringify(opened_tab), function (err) {
+            if (err) throw err;
+            console.log('Saved!');
+        });
+    }
 });

@@ -8,10 +8,13 @@ app.use(express.json({limit: '1mb'}));
 //
 
 app.get('/api', (req, res) => {
-    const opened1 = fs.readFileSync('base.txt', 'utf-8', function(err) {
+    // const opened1 = fs.readFileSync('base.txt', 'utf-8', function(err) {
+    // });
+    // res.end(opened1)
+    // console.log(opened1, 'gotowe');
+    fs.readFile('base.txt', function(err, data){
+        res.send(data)
     });
-    res.send(opened1)
-    console.log(opened1, 'gotowe');
   });
 
 //
